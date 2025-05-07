@@ -10,16 +10,15 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('categories', function (Blueprint $table) {
+    {
+        Schema::create('categories', function (Blueprint $table) {
         $table->id(); // bigint(20) unsigned auto_increment
         $table->string('category_name', 128);
         $table->string('description', 255);
         $table->timestamp('deleted_at')->nullable();
         $table->timestamps(); // created_at dan updated_at
-    });
-}
-
+        });
+    }
 
     /**
      * Reverse the migrations.
