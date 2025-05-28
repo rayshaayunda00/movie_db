@@ -26,7 +26,7 @@ class MovieFactory extends Factory
             'slug' => $slug,
             'synopsis' => fake()->paragraphs(rand(2, 4), true),
             'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory(), // fallback ke factory
-            'year' => fake()->year(),
+            'release_year' => fake()->year(),
             'actors' => fake()->name() . ', ' . fake()->name() . ', ' . fake()->name(),
             'cover_image' => 'https://picsum.photos/seed/' . Str::random(10) . '/480/640',
             'created_at' => now(),
