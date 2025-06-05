@@ -30,6 +30,12 @@ class MovieController extends Controller
 
         return view('homepage', compact('movies'));
     }
+        public function dataMovie()
+    {
+        $movies = Movie::with('category')->get();
+        return view('admin.datamovie', compact('movies'));
+    }
+
 
     public function detail_movie($id, $slug)
     {
@@ -71,6 +77,60 @@ class MovieController extends Controller
             'category_id' => $validated['category_id'],
         ]);
 
-        return redirect('/')->with('success', 'Movie berhasil ditambahkan!');
+        return redirect('/admin/datamovie')->with('success', 'Movie berhasil ditambahkan!');
+
     }
+     public function destroy($id)
+{
+    $movie = Movie::findOrFail($id);
+
+    // Hapus file gambar dari penyimpanan jika perlu
+    if ($movie->cover_image && \Storage::disk('public')->exists($movie->cover_image)) {
+        \Storage::disk('public')->delete($movie->cover_image);
+    }
+
+    $movie->delete();
+
+    return redirect('/admin/datamovie')->with('success', 'Movie berhasil dihapus!');
+}
+
+
+    public function edit($id)
+{
+    $movie = Movie::findOrFail($id);
+    $categories = Category::all();
+    return view('movie_form', compact('movie', 'categories'));
+}
+
+public function update(Request $request, $id)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'synopsis' => 'nullable|string',
+        'year' => 'required|integer|min:1900|max:' . date('Y'),
+        'actors' => 'required|string',
+        'category_id' => 'required|exists:categories,id',
+    ]);
+
+    $movie = Movie::findOrFail($id);
+    $movie->title = $validated['title'];
+    $movie->slug = Str::slug($validated['title']);
+    $movie->synopsis = $validated['synopsis'];
+    $movie->year = $validated['year'];
+    $movie->actors = $validated['actors'];
+    $movie->category_id = $validated['category_id'];
+
+    // Jika ada cover baru diupload
+    if ($request->hasFile('cover_image')) {
+        $imagePath = $request->file('cover_image')->store('covers', 'public');
+        $movie->cover_image = $imagePath;
+    }
+
+    $movie->save();
+
+    return redirect('/admin/datamovie')->with('success', 'Movie berhasil diperbarui!');
+}
+
+
 }

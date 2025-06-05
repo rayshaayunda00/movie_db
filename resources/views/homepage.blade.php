@@ -4,7 +4,7 @@
 
 @section('content')
   <div class="container mt-4">
-    <h1 class="mb-4">Latest Movies</h1>
+    <h1 class="mb-4">Movies</h1>
 
     @if(request('search'))
       <div class="mb-3">
