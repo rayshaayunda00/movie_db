@@ -3,6 +3,22 @@
 @section('title', 'Data Movie')
 
 @section('content')
+{{-- SweetAlert untuk notif sukses Update / Delete --}}
+    @if(session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            });
+        </script>
+    @endif
+
     <h1>Daftar Movie</h1>
 
     {{-- Tombol Kembali ke Input Movie --}}

@@ -137,7 +137,8 @@ public function update(Request $request, $id)
 
     $movie->save();
 
-    return redirect()->route('admin.datamovie', $movie->id)->with('success', 'Movie berhasil diperbarui!');
+    return redirect('/admin/datamovie')->with('success', 'Movie berhasil diperbarui!');
+
 }
 
 

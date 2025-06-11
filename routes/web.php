@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
 // Group: Admin Only
 Route::middleware(['auth', RoleAdmin::class])->group(function () {
     Route::get('/admin/datamovie', [MovieController::class, 'dataMovie'])->name('admin.datamovie');
+    
 });
 
 // routes/web.php
