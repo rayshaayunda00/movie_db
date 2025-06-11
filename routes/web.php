@@ -3,38 +3,41 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MovieController;
+use App\Http\Middleware\RoleAdmin;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Halaman Utama
+Route::get('/', [MovieController::class, 'index'])->name('home');
 
 
-
-Route::get('/', [MovieController::class, 'index']);
-
-Route::get('/movie/{id}/{slug}', [MovieController::class, 'detail_movie']);
-
-Route::get('/movie/create', [MovieController::class, 'create'])->middleware('auth');
-
-Route::post('/movie/store',[MovieController::class,'store'])->middleware('auth');
-
-Route::get('/login', [AuthController::class,'formLogin'])->name('login');
-
-Route::post('/login', [AuthController::class,'login']);
-
+// Auth Routes
+Route::get('/login', [AuthController::class, 'formLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
+// Group: Authenticated User
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/admin/datamovie', [MovieController::class, 'dataMovie'])->name('admin.datamovie');
+    // Tambah Movie
+    Route::get('/movie/create', [MovieController::class, 'create'])->name('movie.create');
+    Route::post('/movie/store', [MovieController::class, 'store'])->name('movie.store');
 
-Route::get('/admin/datamovie', [MovieController::class, 'dataMovie']);
+    // Edit & Update Movie
+    Route::get('/movie/{id}/edit', [MovieController::class, 'edit'])->name('movie.edit');
+    Route::put('/movie/{id}/update', [MovieController::class, 'update'])->name('movie.update');
 
-// Edit Movie
-Route::get('/movie/{id}/edit', [MovieController::class, 'edit'])->middleware('auth')->name('movie.edit');
+    // Delete Movie
+    Route::delete('/movie/{id}/delete', [MovieController::class, 'destroy'])->name('movie.destroy');
+});
 
-// Update Movie
-Route::put('/movie/{id}/update', [MovieController::class, 'update'])->middleware('auth');
+// Group: Admin Only
+Route::middleware(['auth', RoleAdmin::class])->group(function () {
+    Route::get('/admin/datamovie', [MovieController::class, 'dataMovie'])->name('admin.datamovie');
+});
 
-// Delete Movie
-Route::delete('/movie/{id}/delete', [MovieController::class, 'destroy'])->middleware('auth');
+// routes/web.php
+// Route::get('/movie/{id}', [MovieController::class, 'show'])->name('detail');
 
+// Detail Movie (HARUS diletakkan PALING BAWAH karena dinamis)
+Route::get('/movie/{id}/{slug}', [MovieController::class, 'detail_movie'])->name('movie.detail');
+
+Route::get('/', [MovieController::class, 'index'])->name('movies.index');

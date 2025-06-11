@@ -6,11 +6,15 @@
   <div class="container mt-4">
     <h1 class="mb-4">Movies</h1>
 
+
+
     @if(request('search'))
       <div class="mb-3">
         <p class="text-muted">Hasil pencarian untuk: <strong>{{ request('search') }}</strong></p>
       </div>
     @endif
+
+
 
     <div class="row">
       @foreach ($movies as $movie)
@@ -30,7 +34,7 @@
                   <h5 class="card-title">{{ $movie->title }}</h5>
                   <p class="card-text">{{ Str::words($movie->synopsis, 15) }}</p>
                   <p class="card-text">
-                    <small class="text-muted">Year: {{ $movie->year }}</small>
+                    <small class="text-muted">Year: {{ $movie->release_year }}</small>
                   </p>
                   <a href="/movie/{{ $movie->id }}/{{ $movie->slug }}" class="btn btn-custom">Read More</a>
                 </div>
@@ -42,7 +46,7 @@
     </div>
 
     <div class="mt-4">
-      {{ $movies->appends(request()->query())->links() }}
+     {{ $movies->appends(request()->query())->links() }}
     </div>
   </div>
 @endsection

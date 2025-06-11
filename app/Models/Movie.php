@@ -16,7 +16,7 @@ class Movie extends Model
         'slug',
         'synopsis',
         'category_id',
-        'year',
+        'release_year',
         'actors',
         'cover_image'
     ];

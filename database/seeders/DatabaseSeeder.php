@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         //$this->call(CategorySeeder::class);
 
         // Membuat 50 data Movie menggunakan factory
-       // Movie::factory(50)->create();
+       //Movie::factory(50)->create();
        user::factory(3)->create();
 
         // Jika Anda ingin menambahkan user secara manual
